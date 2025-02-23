@@ -7,33 +7,35 @@ class GradientDescent():
         self.c1 = c1
         self.c2 = c2
 
-    def optimize(self, X, y):
+    def optimize(self, loss_fn, grad_fn, theta_init):
 
-        """Perform gradient descent optimization with Wolfe conditions."""
-
-        m, n = X.shape
-        theta = np.random.randn(n) # Randomly initialize parameter
-
-        while True:
-            gradient = (1/m)* X.T @ (X @ theta -y)
-            step_size = self._strong_wolfe_line_search(X,y,theta,gradient)
-            update = step_size * gradient
-
-            if np.linalg.norm(update) < self.tol: # Convergence check
-                break
-
-            theta -= update
+        """Perform gradient descent optimization with Wolfe conditions.
         
+        :param loss_fn: Function that computes the loss.
+        :param grad_fn: Function that computes the gradient.
+        :param theta_init: Initial parameter values
+        
+        :return: Optimized theta"""
+
+        theta = theta_init
+        
+        while True:
+            gradient = grad_fn(theta)
+
+            # Stop when gradient norm is below tolerance (convergence)
+            if np.linalg.norm(gradient) < self.tol:
+                break
+            step_size = self._strong_wolfe_line_search(loss_fn, grad_fn, theta, gradient)
+            theta -= step_size* gradient
+
         return theta
     
-    def _strong_wolfe_line_search(self,X,y,theta,gradient):
+    def _strong_wolfe_line_search(self,loss_fn, grad_fn, theta, gradient):
         """Perform backtracking line search to satisfy Wolfe conditions."""
         step_size = self.learning_rate
-        loss = lambda t: np.sum((X @ (theta - t * gradient) - y ) ** 2) /2
-        grad_loss = lambda t: np.dot(gradient, (1/X.shape[0]) * X.T @ (X @ (theta - t* gradient) - y))
         
-        while loss(step_size) > loss(0) - self.c1 * step_size * np.dot(gradient,gradient) and \
-            abs(grad_loss(step_size)) > self.c2 * abs(np.dot(gradient,gradient)):
-            step_size *=0.5 #Reduce step size if Armijo condition is not met
-
+        while loss_fn(theta-step_size*gradient) > loss_fn(theta) - self.c1 * step_size * np.dot(gradient, gradient) and \
+            abs(np.dot(grad_fn(theta - step_size* gradient), gradient)) > self.c2 * abs(np.dot(gradient, gradient)):
+            step_size *= 0.5 # Reduce step size if Wolfe conditions are not met
+            
         return step_size
