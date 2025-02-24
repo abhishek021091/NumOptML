@@ -1,16 +1,19 @@
 # NumOptML
 NUMOPTML is a pure NumPy-based machine learning library focused on implementing optimization techniques and automatic differentiation for research and practical applications. The library is designed to provide efficient optimization methods while keeping it simple and easy to understand.
+
 ### Features
-- Optimization Algorithms: Gradient Descent, Momentum, Wolfe Conditions (Planned: Learning Rate Prediction with Reinforcement Learning)
-- Machine Learning Models: Linear Regression (Planned: Ridge Regression, Softmax Regression, etc.)
-- Automatic Differentiation: Efficient computation of gradients for optimization
-- Fully NumPy-Based: No external dependencies beyond NumPy
+- **Optimization Algorithms**: Gradient Descent, Dynamic Learning Rate using Wolfe Conditions (Planned: Learning Rate Prediction with Reinforcement Learning and Convergence with the help of Momentum)
+- **Machine Learning Models**: Linear Regression (Planned: Ridge Regression, Softmax Regression, etc.)
+- **Automatic Differentiation**: Efficient computation of gradients for optimization
+- **Fully NumPy-Based**: No external dependencies beyond NumPy
+
 ### Installation
 NUMOPTML is currently in development. To try it out, clone the repository:
 ```
 git clone https://github.com/yourusername/NUMOPTML.git
 cd NUMOPTML
 ```
+
 ### Usage
 Here's a simple example of using Linear Regression with NUMOPTML:
 ```python
